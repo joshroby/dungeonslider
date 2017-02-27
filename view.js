@@ -98,7 +98,6 @@ var view = {
 	},
 	
 	toggleSliderButtons: function() {
-		console.log('toggle');
 		var toggle = document.getElementById('slideLeftAButton').disabled;
 		toggle = !toggle;
 		var buttons = [];
@@ -114,7 +113,7 @@ var view = {
 		for (i in buttons) {
 			buttons[i].disabled = toggle;
 			if (toggle) {
-				buttons[i].children[0].style.opacity = 0.9;
+				buttons[i].children[0].style.opacity = 0.5;
 			} else {
 				buttons[i].children[0].style.opacity = 1;
 			};

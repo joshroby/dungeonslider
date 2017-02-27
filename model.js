@@ -40,52 +40,68 @@ function Hero(type) {
 		this.type = "Cleric";
 	};
 	
+	this.loot = function(type) {
+		if (type == undefined) {type = ["weapon","armor","potion"][Math.random() * 3 << 0]};
+		
+		if (type === "weapon" && Math.random() * 10 << 0 > this.weapon) {
+			this.weapon++;
+			console.log(this.type,"found a",type,"upgrade!");
+		}
+		
+		if (type === "armor" && Math.random() * 10 << 0 > this.armor) {
+			this.armor++;
+			console.log(this.type,"found a",type,"upgrade!");
+		}
+		
+		if (type === "potion") {
+			this.hitPoints = Math.min(150,this.hitPoints + 50);
+			console.log(this.type,"found a",type,"!");
+		}
+		
+	};
+	
 	this.move = function() {
 		var start = grid[this.x][this.y];
 		var look = {north:[start],south:[start],east:[start],west:[start]};
 		
 		// Look North
-		for (i=0;i<5;i++) {
-			var target = grid[this.x-i-1][this.y];
-			if (look.north[i].exits.north && target.exits.south) {
+		for (i=1;i<5 && this.x-i>-1;i++) {
+			var target = grid[this.x-i][this.y];
+			if (look.north[i-1].exits.north && target.exits.south) {
 				look.north.push(target);
 			} else {
 				i = 5;
 			}
-			if (this.x-i === 1) {i=5};
 		};
 		
 		// Look South
-		for (i=0;i<5;i++) {
-			var target = grid[this.x+i+1][this.y];
-			if (look.south[i].exits.south && target.exits.north) {
+		for (i=1;i<5 && this.x+i < grid.length;i++) {
+			var target = grid[this.x+i][this.y];
+			if (look.south[i-1].exits.south && target.exits.north) {
 				look.south.push(target);
 			} else {
 				i = 5;
 			}
-			if (this.x+i+2 === grid.length) {i=5};
 		};
 		
 		// Look West
-		for (i=0;i<5;i++) {
-			var target = grid[this.x][this.y-i-1];
-			if (look.west[i].exits.west && target.exits.east) {
+		for (i=1;i<5 && this.y-i > -1;i++) {
+			var target = grid[this.x][this.y-i];
+			if (look.west[i-1].exits.west && target.exits.east) {
 				look.west.push(target);
 			} else {
 				i = 5;
 			}
-			if (this.y-i === 1) {i=5};
 		};
 		
 		// Look East
-		for (i=0;i<5;i++) {
-			var target = grid[this.x][this.y+1+i];
-			if (look.east[i].exits.east && target.exits.west) {
+		for (i=1;i<5 && this.y+i < grid[0].length;i++) {
+			var target = grid[this.x][this.y+i];
+			if (look.east[i-1].exits.east && target.exits.west) {
 				look.east.push(target);
 			} else {
 				i = 5;
 			}
-			if (this.y+i+2 === grid.length) {i=5};
 		};
 		
 		for (i in look) {look[i].shift();look[i].reverse()};
@@ -179,20 +195,20 @@ function Hero(type) {
 		};
 		
 		console.log(this.type,"moves",direction);
-		if (direction === "north") {
+		if (direction === "north" && this.hitPoints > 0) {
 			this.x--;
-		} else if (direction === "south") {
+		} else if (direction === "south" && this.hitPoints > 0) {
 			this.x++;
-		} else if (direction === "east") {
+		} else if (direction === "east" && this.hitPoints > 0) {
 			this.y++;
-		} else if (direction === "west") {
+		} else if (direction === "west" && this.hitPoints > 0) {
 			this.y--;
 		}
 		
 		// cleric heals
 		if (this.type === "Cleric") {
 			for (i in heroes) {
-				if (heroes[i].x === this.x && heroes[i].y === this.y) {
+				if (heroes[i].x === this.x && heroes[i].y === this.y && heroes[i].hitPoints < 100) {
 					heroes[i].hitPoints = Math.min(100,heroes[i].hitPoints + 10);
 				};
 			};
@@ -208,6 +224,9 @@ function newGame(level,x,y) {
 	if (x == undefined ) {x = 5};
 	if (y == undefined ) {y = 5};
 	if (level == undefined ) {level = dungeonLevel};
+	
+	console.log('new');
+	document.getElementById('levelHead').innerHTML = "Dungeon Level " + level;
 
 	grid = [];
 	rooms = [];
@@ -222,12 +241,17 @@ function newGame(level,x,y) {
 		grid.push(newRow);
 	};
 	
-	grid[2][2].monster = false;
-	grid[2][2].treasure = false;
+	if (level = 1) {
+		grid[2][2].monster = false;
+		grid[2][2].treasure = false;
+	};
 	
 	treasureTotal = 0;
 	for (i in rooms) {
 		if (rooms[i].treasure) {treasureTotal++};
+	};
+	if (treasureTotal === 0) {
+		grid[Math.random() * grid.length << 0][Math.random() * grid[0].length << 0].stairs = true;
 	};
 	
 	if (Object.keys(heroes).length === 0) {
@@ -240,8 +264,6 @@ function newGame(level,x,y) {
 		};
 		
 	};
-	
-	document.getElementById('titleHead').innerHTML = "Dungeon Level " + level;
 	
 	view.refreshGrid();
 	view.refreshHeroes();
@@ -276,7 +298,6 @@ function slide(direction,index) {
 	} else {
 		console.log("Error: invalid direction to slide in.");
 	};
-	var delay = 0;
 	for (i in heroes) {
 		if (heroes[i].x === index && direction === "left") {
 			heroes[i].y--;
@@ -289,6 +310,15 @@ function slide(direction,index) {
 		}
 		if (heroes[i].x < 0) {heroes[i].x = grid.length-1};
 		if (heroes[i].y < 0) {heroes[i].y = grid[0].length-1};
+		if (heroes[i].x > grid.length-1) {heroes[i].x = 0};
+		if (heroes[i].y > grid[0].length-1) {heroes[i].y = 0};
+	};
+	moves();
+};
+
+function moves() {
+	var delay = 0;
+	for (i in heroes) {
 		var timedEvent = setTimeout(heroes[i].move.bind(heroes[i]),1000+delay);
 		delay += 500;
 	};
@@ -300,8 +330,9 @@ function dungeonMoves() {
 	for (i in heroes) {
 		if (grid[heroes[i].x][heroes[i].y].monster) {
 			heroes[i].hitPoints -= ( 10 +  Math.random() * 50 ) / heroes[i].armor << 0 ;
-			if (Math.random() * 10 < heroes[i].weapon) {
+			if (Math.random() * 10 < heroes[i].weapon && heroes[i].hitPoints > 0) {
 				grid[heroes[i].x][heroes[i].y].monster = false;
+				lootTile(heroes[i].x,heroes[i].y);
 				view.refreshGrid();
 			};
 		};
@@ -309,6 +340,7 @@ function dungeonMoves() {
 	for (i in heroes) {
 		if (grid[heroes[i].x][heroes[i].y].treasure) {
 			grid[heroes[i].x][heroes[i].y].treasure = false;
+			lootTile(heroes[i].x,heroes[i].y);
 			treasureTotal--;
 			if (treasureTotal < 1) {
 				grid[Math.random() * grid.length << 0][Math.random() * grid[0].length << 0].stairs = true;
@@ -329,4 +361,10 @@ function dungeonMoves() {
 
 	view.toggleSliderButtons();
 	view.refreshHeroes();
+};
+
+function lootTile(x,y) {
+	for (i in heroes) {
+		if (heroes[i].x === x && heroes[i].y === y) {heroes[i].loot()};
+	}
 };
