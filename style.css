@@ -1,0 +1,124 @@
+
+body {
+	background-color: lightgray;
+	}
+
+.gridRow {
+	clear: both;
+	}
+
+.slideButtonDiv {
+	float: left;
+	width: 100px;
+	height: 100px;
+	text-align: center;
+	}
+
+.slideButton {
+	display: table-cell;
+	vertical-align: middle;
+	}
+
+.gridSquare {
+	float: left;
+	width: 100px;
+	height: 100px;
+	text-align: center;
+	position: relative;
+	}
+
+.tileImg {
+	width: 100%;
+	height: 100%;
+	position: absolute;
+	top: 0px;
+	left: 0px;
+	}
+
+.debug {
+	z-index: 10000;
+	line-height: 2em;
+/* 
+	display: hidden;
+ */
+	}
+
+.exitNorth {
+	z-index: 1;
+	}
+
+.exitSouth {
+	z-index: 2;
+	}
+
+.exitEast {
+	z-index: 3;
+	}
+
+.exitWest {
+	z-index: 4;
+	}
+
+.treasure {
+	z-index: 5;
+	}
+
+.monster {
+	z-index: 6;
+	}
+
+.warrior {
+	z-index: 10;
+	}
+
+.thief {
+	z-index: 10;
+	}
+
+.wizard {
+	z-index: 10;
+	}
+
+.cleric {
+	z-index: 10;
+	}
+
+
+
+
+#heroesDiv {
+	clear: both;
+	}
+	
+.heroDiv {
+	float: left;
+	padding-left: 20px;
+	padding-right: 20px;
+	margin: 10px;
+	width: 100px;
+	}
+
+.heroHeader {
+	text-align:right;
+	}
+
+.heroDescription {
+	font-size: 0.8em;
+	text-align: center;
+	}
+
+#warriorDiv {
+	border: 2px solid red;
+	}
+
+#thiefDiv {
+	border: 2px solid blue;
+	}
+
+#wizardDiv {
+	border: 2px solid gold;
+	}
+
+#clericDiv {
+	border: 2px solid green;
+	}
