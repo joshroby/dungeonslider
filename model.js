@@ -2,6 +2,7 @@
 
 var grid = [];
 var heroes = {};
+var dungeonLevel = 1;
 var treasureTotal = 0;
 	
 function Room() {
@@ -206,6 +207,7 @@ function newGame(level,x,y) {
 	
 	if (x == undefined ) {x = 5};
 	if (y == undefined ) {y = 5};
+	if (level == undefined ) {level = dungeonLevel};
 
 	grid = [];
 	rooms = [];
@@ -238,6 +240,8 @@ function newGame(level,x,y) {
 		};
 		
 	};
+	
+	document.getElementById('titleHead').innerHTML = "Dungeon Level " + level;
 	
 	view.refreshGrid();
 	view.refreshHeroes();
@@ -314,6 +318,15 @@ function dungeonMoves() {
 	};
 
 //	check if all alive heroes are at stairs, if so, new level	
+	var atStairs = 0;
+	for (i in heroes) {
+		if (grid[heroes[i].x][heroes[i].y].stairs) {atStairs++};
+	};
+	if (atStairs === 4) {
+		dungeonLevel++;
+		newGame();
+	};
+
 	view.toggleSliderButtons();
 	view.refreshHeroes();
 };

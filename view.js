@@ -101,14 +101,23 @@ var view = {
 		console.log('toggle');
 		var toggle = document.getElementById('slideLeftAButton').disabled;
 		toggle = !toggle;
+		var buttons = [];
 		for (x=0;x<grid.length;x++) {
 			var row = ["A","B","C","D","E"][x]
-			document.getElementById('slideLeft'+row+'Button').disabled = toggle;
-			document.getElementById('slideRight'+row+'Button').disabled = toggle;
+			buttons.push(document.getElementById('slideLeft'+row+'Button'));
+			buttons.push(document.getElementById('slideRight'+row+'Button'));
 		};
 		for (y=0;y<grid[0].length;y++) {
-			document.getElementById('slideUp'+y+'Button').disabled = toggle;
-			document.getElementById('slideDown'+y+'Button').disabled = toggle;
+			buttons.push(document.getElementById('slideUp'+y+'Button'));
+			buttons.push(document.getElementById('slideDown'+y+'Button'));
+		};
+		for (i in buttons) {
+			buttons[i].disabled = toggle;
+			if (toggle) {
+				buttons[i].children[0].style.opacity = 0.9;
+			} else {
+				buttons[i].children[0].style.opacity = 1;
+			};
 		};
 	},
 
