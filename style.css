@@ -38,9 +38,7 @@ body {
 .debug {
 	z-index: 10000;
 	line-height: 2em;
-/* 
-	display: hidden;
- */
+	display: none;
 	}
 
 .exitNorth {
@@ -59,12 +57,16 @@ body {
 	z-index: 4;
 	}
 
-.treasure {
+.stairs {
 	z-index: 5;
 	}
 
-.monster {
+.treasure {
 	z-index: 6;
+	}
+
+.monster {
+	z-index: 20;
 	}
 
 .warrior {
@@ -72,15 +74,15 @@ body {
 	}
 
 .thief {
-	z-index: 10;
+	z-index: 11;
 	}
 
 .wizard {
-	z-index: 10;
+	z-index: 12;
 	}
 
 .cleric {
-	z-index: 10;
+	z-index: 14;
 	}
 
 

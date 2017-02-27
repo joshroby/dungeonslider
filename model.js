@@ -2,6 +2,7 @@
 
 var grid = [];
 var heroes = {};
+var treasureTotal = 0;
 	
 function Room() {
 	this.exits = {
@@ -39,7 +40,6 @@ function Hero(type) {
 	};
 	
 	this.move = function() {
-		console.log(this.type,"moves!");
 		var start = grid[this.x][this.y];
 		var look = {north:[start],south:[start],east:[start],west:[start]};
 		
@@ -90,7 +90,7 @@ function Hero(type) {
 		for (i in look) {look[i].shift();look[i].reverse()};
 		
 		// What is in the visible rooms?
-		var targets = {north:{monster:10,treasure:10,tank:0,patient:100},south:{monster:10,treasure:10,tank:0,patient:100},east:{monster:10,treasure:10,tank:0,patient:100},west:{monster:10,treasure:10,tank:0,patient:100}};
+		var targets = {north:{monster:10,treasure:10,tank:0,patient:100,stairs:10},south:{monster:10,treasure:10,tank:0,patient:100,stairs:10},east:{monster:10,treasure:10,tank:0,patient:100,stairs:10},west:{monster:10,treasure:10,tank:0,patient:100,stairs:10}};
 		for (i in look) {
 			for (n in look[i]) {
 				if (look[i][n].monster) {
@@ -98,6 +98,9 @@ function Hero(type) {
 				};
 				if (look[i][n].treasure) {
 					targets[i].treasure = look[i].length - n;
+				};
+				if (look[i][n].stairs) {
+					targets[i].stairs = look[i].length - n;
 				};
 				for (t in heroes) {
 					if (look[i][n] === grid[heroes[t].x][heroes[t].y]) {
@@ -113,7 +116,7 @@ function Hero(type) {
 				}
 			};
 		};
-		console.log("targets",targets);
+		console.log(this.type,"targets:",targets);
 		
 		var directionClosestMonster = undefined;
 		if (targets.north.monster !== 10 && targets.north.monster < targets.south.monster && targets.north.monster < targets.east.monster && targets.north.monster < targets.west.monster) {directionClosestMonster = "north"
@@ -137,29 +140,40 @@ function Hero(type) {
 		};
 		
 		var directionHighHealth = undefined;
-		if (targets.north.patient !== 0 && targets.north.patient > targets.south.patient && targets.north.patient > targets.east.patient && targets.north.patient > targets.west.patient) {directionHighHealth = "north"
-		} else if (targets.south.patient !== 0 && targets.south.patient > targets.north.patient && targets.south.patient > targets.east.patient && targets.south.patient > targets.west.patient) {directionHighHealth = "south"
-		} else if (targets.east.patient !== 0 && targets.east.patient > targets.north.patient && targets.east.patient > targets.south.patient && targets.east.patient > targets.west.patient) {directionHighHealth = "east"
-		} else if (targets.west.patient !== 0 && targets.west.patient > targets.north.patient && targets.west.patient > targets.east.patient && targets.west.patient > targets.south.patient) {directionHighHealth = "west"
+		if (targets.north.tank !== 0 && targets.north.tank > targets.south.tank && targets.north.tank > targets.east.tank && targets.north.tank > targets.west.tank) {directionHighHealth = "north"
+		} else if (targets.south.tank !== 0 && targets.south.tank > targets.north.tank && targets.south.tank > targets.east.tank && targets.south.tank > targets.west.tank) {directionHighHealth = "south"
+		} else if (targets.east.tank !== 0 && targets.east.tank > targets.north.tank && targets.east.tank > targets.south.tank && targets.east.tank > targets.west.tank) {directionHighHealth = "east"
+		} else if (targets.west.tank !== 0 && targets.west.tank > targets.north.tank && targets.west.tank > targets.east.tank && targets.west.tank > targets.south.tank) {directionHighHealth = "west"
+		};
+		
+		var directionStairs = undefined;
+		if (targets.north.stairs !== 10 && targets.north.stairs < targets.south.stairs && targets.north.stairs < targets.east.stairs && targets.north.stairs < targets.west.stairs) {directionStairs = "north"
+		} else if (targets.south.stairs !== 10 && targets.south.stairs < targets.north.stairs && targets.south.stairs < targets.east.stairs && targets.south.stairs < targets.west.stairs) {directionStairs = "south"
+		} else if (targets.east.stairs !== 10 && targets.east.stairs < targets.north.stairs && targets.east.stairs < targets.south.stairs && targets.east.stairs < targets.west.stairs) {directionStairs = "east"
+		} else if (targets.west.stairs !== 10 && targets.west.stairs < targets.north.stairs && targets.west.stairs < targets.east.stairs && targets.west.stairs < targets.south.stairs) {directionStairs = "west"
 		};
 
 		var direction;
 		if (this.type === "Warrior") {
 			if (directionClosestMonster !== undefined) {direction = directionClosestMonster;
 			} else if (directionLowHealth !== undefined) {direction = directionLowHealth;
+			} else if (directionStairs !== undefined) {direction = directionStairs;
 			} else if (directionHighHealth !== undefined) {direction = directionHighHealth;
 			};
 		} else if (this.type === "Thief") {
 			if (directionClosestTreasure !== undefined) {direction = directionClosestTreasure;
+			} else if (directionStairs !== undefined) {direction = directionStairs;
 			} else if (directionLowHealth !== undefined) {direction = directionLowHealth;
 			} else if (directionHighHealth !== undefined) {direction = directionHighHealth;
 			};
 		} else if (this.type === "Wizard") {
 			if (directionHighHealth !== undefined) {direction = directionHighHealth;
+			} else if (directionStairs !== undefined) {direction = directionStairs;
 			};
 		} else if (this.type === "Cleric") {
 			if (directionLowHealth !== undefined) {direction = directionLowHealth;
 			} else if (directionHighHealth !== undefined) {direction = directionHighHealth;
+			} else if (directionStairs !== undefined) {direction = directionStairs;
 			};
 		};
 		
@@ -174,25 +188,34 @@ function Hero(type) {
 			this.y--;
 		}
 		
-		// check for treasure and loot
 		// cleric heals
+		if (this.type === "Cleric") {
+			for (i in heroes) {
+				if (heroes[i].x === this.x && heroes[i].y === this.y) {
+					heroes[i].hitPoints = Math.min(100,heroes[i].hitPoints + 10);
+				};
+			};
+		};
 		
 		view.refreshGrid();
 	};
 	
 };
 
-function newGame(x,y) {
+function newGame(level,x,y) {
 	
 	if (x == undefined ) {x = 5};
 	if (y == undefined ) {y = 5};
 
 	grid = [];
+	rooms = [];
 
-	for (i=0;i<5;i++) {
+	for (i=0;i<x;i++) {
 		var newRow = [];
-		for (n=0;n<5;n++) {
-			newRow.push(new Room());
+		for (n=0;n<y;n++) {
+			var newRoom = new Room();
+			newRow.push(newRoom);
+			rooms.push(newRoom);
 		}
 		grid.push(newRow);
 	};
@@ -200,12 +223,21 @@ function newGame(x,y) {
 	grid[2][2].monster = false;
 	grid[2][2].treasure = false;
 	
-	var heroTypes = {warrior:1,thief:1,wizard:1,cleric:1};
+	treasureTotal = 0;
+	for (i in rooms) {
+		if (rooms[i].treasure) {treasureTotal++};
+	};
 	
-	for (i in heroTypes) {
-		var newHero = new Hero(i);
-		heroes[i] = newHero;
-	}
+	if (Object.keys(heroes).length === 0) {
+	
+		var heroTypes = {warrior:1,thief:1,wizard:1,cleric:1};
+	
+		for (i in heroTypes) {
+			var newHero = new Hero(i);
+			heroes[i] = newHero;
+		};
+		
+	};
 	
 	view.refreshGrid();
 	view.refreshHeroes();
@@ -260,20 +292,28 @@ function slide(direction,index) {
 };
 
 function dungeonMoves() {
-	console.log("Monsters Attack! Rar!");
+	console.log("Dungeon Moves");
 	for (i in heroes) {
 		if (grid[heroes[i].x][heroes[i].y].monster) {
-			heroes[i].hitPoints -= ( 10 +  Math.random() * 20 << 0 ) / heroes[i].armor << 0 ;
-			grid[heroes[i].x][heroes[i].y].monster = false;
+			heroes[i].hitPoints -= ( 10 +  Math.random() * 50 ) / heroes[i].armor << 0 ;
+			if (Math.random() * 10 < heroes[i].weapon) {
+				grid[heroes[i].x][heroes[i].y].monster = false;
+				view.refreshGrid();
+			};
 		};
 	};
 	for (i in heroes) {
 		if (grid[heroes[i].x][heroes[i].y].treasure) {
-			heroes[i].gold++;
 			grid[heroes[i].x][heroes[i].y].treasure = false;
-//			check if all treasure is collected; if so, reveal stairs down			
+			treasureTotal--;
+			if (treasureTotal < 1) {
+				grid[Math.random() * grid.length << 0][Math.random() * grid[0].length << 0].stairs = true;
+			};
 			view.refreshGrid();
 		};
 	};
+
+//	check if all alive heroes are at stairs, if so, new level	
+	view.toggleSliderButtons();
 	view.refreshHeroes();
 };

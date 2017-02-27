@@ -1,7 +1,7 @@
 var view = {
 
 	refreshGrid: function() {
-		console.log('Refresh Grid!');
+// 		console.log('Refresh Grid!');
 		for (x=0;x<5;x++) {
 			for (y=0;y<5;y++) {
 				var row = ["A","B","C","D","E"][x]
@@ -43,6 +43,13 @@ var view = {
 					exitWest.className = 'exitWest, tileImg';
 					exitWest.src = 'assets/exit-w.png';
 					cell.appendChild(exitWest);
+				};
+				if (grid[x][y].stairs) {
+					var stairs = document.createElement('img');
+					stairs.id = cellId + 'stairs';
+					stairs.className = 'stairs, tileImg';
+					stairs.src = 'assets/stairs.png';
+					cell.appendChild(stairs);
 				};
 				if (grid[x][y].treasure) {
 					var treasure = document.createElement('img');
@@ -88,6 +95,21 @@ var view = {
 		document.getElementById('clericHitPoints').innerHTML = heroes.cleric.hitPoints;
 		document.getElementById('clericArmor').innerHTML = heroes.cleric.armor;
 		document.getElementById('clericWeapon').innerHTML = heroes.cleric.weapon;
-	}
+	},
+	
+	toggleSliderButtons: function() {
+		console.log('toggle');
+		var toggle = document.getElementById('slideLeftAButton').disabled;
+		toggle = !toggle;
+		for (x=0;x<grid.length;x++) {
+			var row = ["A","B","C","D","E"][x]
+			document.getElementById('slideLeft'+row+'Button').disabled = toggle;
+			document.getElementById('slideRight'+row+'Button').disabled = toggle;
+		};
+		for (y=0;y<grid[0].length;y++) {
+			document.getElementById('slideUp'+y+'Button').disabled = toggle;
+			document.getElementById('slideDown'+y+'Button').disabled = toggle;
+		};
+	},
 
 }
