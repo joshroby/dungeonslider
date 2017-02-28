@@ -14,5 +14,12 @@ var handlers = {
 		view.refreshGrid();
 	},
 
+	goose: function() {
+		console.log("Honk!");
+	},
+	
+	tunnel: function() {
+		console.log("Tunnel!");
+	},
 
 }

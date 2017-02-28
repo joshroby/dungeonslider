@@ -56,6 +56,14 @@ body {
 	display: none;
 	}
 
+#levelDiv {
+	background-color: #333;
+	}
+
+#levelHead {
+	color: magenta;
+	}
+
 .exitNorth {
 	z-index: 1;
 	}

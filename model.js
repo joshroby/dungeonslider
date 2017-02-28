@@ -5,15 +5,22 @@ var heroes = {};
 var dungeonLevel = 1;
 var treasureTotal = 0;
 	
-function Room() {
+function Room(level) {
+
 	this.exits = {
-		north: Math.random() * 3 << 0 > 0,
-		south: Math.random() * 3 << 0 > 0,
-		east: Math.random() * 3 << 0 > 0,
-		west: Math.random() * 3 << 0 > 0,
+		north: false,
+		south: false,
+		east: false,
+		west: false,
 	};
-	this.treasure = Math.random() * 8 << 0 < 1;
-	this.monster = Math.random() * 8 << 0 < 1;
+	for (e=0;e<10;e++) {
+		var direction = ["north","south","east","west"][Math.random() * 4 << 0];
+		this.exits[direction] = true;
+		e += Math.random() * Math.min(20,level) << 0;
+	};
+
+	this.treasure = false;
+	this.monster = false;
 	this.designation = ["a","b","c","d","e","f","g","h","i","j","k",'l','m','n','o','p','q','r','s','t','u','v','w','x','y','z'][Math.random() * 26 << 0];
 	this.designation += ["a","b","c","d","e","f","g","h","i","j","k",'l','m','n','o','p','q','r','s','t','u','v','w','x','y','z'][Math.random() * 26 << 0];
 };
@@ -234,16 +241,30 @@ function newGame(level,x,y) {
 	for (i=0;i<x;i++) {
 		var newRow = [];
 		for (n=0;n<y;n++) {
-			var newRoom = new Room();
+			var newRoom = new Room(level);
 			newRow.push(newRoom);
 			rooms.push(newRoom);
 		}
 		grid.push(newRow);
 	};
 	
-	if (level = 1) {
+	for (i=0;i<Math.min(20,level);i++) {
+		grid[Math.random() * grid.length << 0][Math.random() * grid[0].length << 0].treasure = true;
+	};
+	
+	for (i=0;i<level;i++) {
+		// different monsters can 'cost' different amounts of levels
+		grid[Math.random() * grid.length << 0][Math.random() * grid[0].length << 0].monster = true;
+	};
+	
+	if (level = 1 && grid[2][2].monster) {
 		grid[2][2].monster = false;
+		grid[1][1].monster = true;
+	};
+	
+	if (level = 1 && grid[2][2].treasure) {
 		grid[2][2].treasure = false;
+		grid[3][3].treasure = true;
 	};
 	
 	treasureTotal = 0;
@@ -320,9 +341,9 @@ function moves() {
 	var delay = 0;
 	for (i in heroes) {
 		var timedEvent = setTimeout(heroes[i].move.bind(heroes[i]),1000+delay);
-		delay += 500;
+		delay += 250;
 	};
-	var monstersAttackEvent = setTimeout(dungeonMoves,3000);
+	var monstersAttackEvent = setTimeout(dungeonMoves,2000);
 };
 
 function dungeonMoves() {

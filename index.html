@@ -21,7 +21,7 @@
 		
 				<div id='topButtonsDiv' class='gridRow'>
 			
-					<div class='slideButtonDiv'>
+					<div id='levelDiv' class='slideButtonDiv'>
 						<h3 id='levelHead'>Dungeon<br />Level<br>0</h3>
 					</div>
 			
@@ -43,6 +43,10 @@
 			
 					<div id='slideUp4' class='gridSquare'>
 						<button id='slideUp4Button' class='slideButton' onclick='handlers.slide("up",4)'><img class='slideButtonImg' src='assets/arrow-up.png' /></button>
+					</div>
+			
+					<div id='tunnelDiv' class='gridSquare'>
+						<button id='tunnelButton' class='slideButton' onclick='handlers.tunnel()'><img class='slideButtonImg' src='assets/tunnel.png' /></button>
 					</div>
 			
 				</div>
@@ -209,8 +213,8 @@
 		
 				<div id='bottomButtonsDiv' class='gridRow'>
 			
-					<div class='slideButtonDiv'>
-						&nbsp;
+					<div id='gooseDiv' class='slideButtonDiv'>
+						<button id='gooseButton' class='slideButton' onclick='handlers.goose()'><img class='slideButtonImg' src='assets/goose.png' /></button>
 					</div>
 			
 					<div id='slideDown0' class='gridSquare'>
