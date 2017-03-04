@@ -4,6 +4,7 @@ var grid = [];
 var heroes = {};
 var dungeonLevel = 1;
 var treasureTotal = 0;
+var heroMoves = {};
 	
 function Room(level) {
 
@@ -67,7 +68,7 @@ function Hero(type) {
 		
 	};
 	
-	this.move = function() {
+	this.move = function(display) {
 		var start = grid[this.x][this.y];
 		var look = {north:[start],south:[start],east:[start],west:[start]};
 		
@@ -201,6 +202,10 @@ function Hero(type) {
 			};
 		};
 		
+		heroMoves[this.type.toLowerCase()] = direction;
+		this.oldX = this.x;
+		this.oldY = this.y;
+		
 		console.log(this.type,"moves",direction);
 		if (direction === "north" && this.hitPoints > 0) {
 			this.x--;
@@ -220,8 +225,7 @@ function Hero(type) {
 				};
 			};
 		};
-		
-		view.refreshGrid();
+		if (display) {console.log('display is true');view.refreshGrid();};
 	};
 	
 };
@@ -334,17 +338,27 @@ function slide(direction,index) {
 		if (heroes[i].x > grid.length-1) {heroes[i].x = 0};
 		if (heroes[i].y > grid[0].length-1) {heroes[i].y = 0};
 	};
-	moves();
+	
+	// Heroes Move
+	for (i in heroes) {
+		heroes[i].move(false);
+	};
+	for (i in heroes) {
+		heroes[i].x = heroes[i].oldX;
+		heroes[i].y = heroes[i].oldY;
+	};
+	console.log(heroMoves);
+	delay = 250;
+	for (i in heroMoves) {
+		if (heroMoves[i] !== undefined) {
+			var timedEvent = setTimeout(heroes[i].move.bind(heroes[i],true),delay);
+			delay += 250;
+		};
+	};
+	var monstersAttackEvent = setTimeout(dungeonMoves,delay);
+	view.refreshGrid();
 };
 
-function moves() {
-	var delay = 0;
-	for (i in heroes) {
-		var timedEvent = setTimeout(heroes[i].move.bind(heroes[i]),1000+delay);
-		delay += 250;
-	};
-	var monstersAttackEvent = setTimeout(dungeonMoves,2000);
-};
 
 function dungeonMoves() {
 	console.log("Dungeon Moves");

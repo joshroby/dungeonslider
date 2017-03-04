@@ -1,0 +1,18 @@
+.shiftLeft {
+	z-index: 100;
+	-webkit-transition:
+		left 5s linear 1s;
+	left: -100px;
+	}
+
+.shiftLeftUnder {
+	z-index: 100;
+	-webkit-transition:
+		left 5s linear 1s,
+		width 1s linear 0s,
+		height 1s linear 0s
+		;
+	left: 400px;
+	width: 80px;
+	height: 80px;
+	}

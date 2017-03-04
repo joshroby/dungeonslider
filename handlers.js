@@ -1,7 +1,6 @@
 var handlers = {
 
 	slide: function(direction,index) {
-		console.log("Sliding",index,direction);
 		slide(direction,index);
 		view.toggleSliderButtons();
 		view.refreshGrid();
@@ -10,7 +9,7 @@ var handlers = {
 	skipTurn: function() {
 		console.log('skip!');
 		view.toggleSliderButtons();
-		moves();
+		slide();
 		view.refreshGrid();
 	},
 
