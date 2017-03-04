@@ -70,7 +70,7 @@ function Hero(type) {
 	
 	this.move = function(display) {
 		var start = grid[this.x][this.y];
-		var look = {north:[start],south:[start],east:[start],west:[start]};
+		var look = {here: [start,start],north:[start],south:[start],east:[start],west:[start]};
 		
 		// Look North
 		for (i=1;i<5 && this.x-i>-1;i++) {
@@ -115,7 +115,7 @@ function Hero(type) {
 		for (i in look) {look[i].shift();look[i].reverse()};
 		
 		// What is in the visible rooms?
-		var targets = {north:{monster:10,treasure:10,tank:0,patient:100,stairs:10},south:{monster:10,treasure:10,tank:0,patient:100,stairs:10},east:{monster:10,treasure:10,tank:0,patient:100,stairs:10},west:{monster:10,treasure:10,tank:0,patient:100,stairs:10}};
+		var targets = {here:{monster:10,treasure:10,tank:0,patient:100,stairs:10},north:{monster:10,treasure:10,tank:0,patient:100,stairs:10},south:{monster:10,treasure:10,tank:0,patient:100,stairs:10},east:{monster:10,treasure:10,tank:0,patient:100,stairs:10},west:{monster:10,treasure:10,tank:0,patient:100,stairs:10}};
 		for (i in look) {
 			for (n in look[i]) {
 				if (look[i][n].monster) {
@@ -144,35 +144,40 @@ function Hero(type) {
 		console.log(this.type,"targets:",targets);
 		
 		var directionClosestMonster = undefined;
-		if (targets.north.monster !== 10 && targets.north.monster < targets.south.monster && targets.north.monster < targets.east.monster && targets.north.monster < targets.west.monster) {directionClosestMonster = "north"
+		if (targets.here.monster !== 10 && targets.here.monster < targets.south.monster && targets.here.monster < targets.east.monster && targets.here.monster < targets.west.monster) {directionClosestMonster = undefined
+		} else if (targets.north.monster !== 10 && targets.north.monster < targets.south.monster && targets.north.monster < targets.east.monster && targets.north.monster < targets.west.monster) {directionClosestMonster = "north"
 		} else if (targets.south.monster !== 10 && targets.south.monster < targets.north.monster && targets.south.monster < targets.east.monster && targets.south.monster < targets.west.monster) {directionClosestMonster = "south"
 		} else if (targets.east.monster !== 10 && targets.east.monster < targets.north.monster && targets.east.monster < targets.south.monster && targets.east.monster < targets.west.monster) {directionClosestMonster = "east"
 		} else if (targets.west.monster !== 10 && targets.west.monster < targets.north.monster && targets.west.monster < targets.east.monster && targets.west.monster < targets.south.monster) {directionClosestMonster = "west"
 		};
 		
 		var directionClosestTreasure = undefined;
-		if (targets.north.treasure !== 10 && targets.north.treasure < targets.south.treasure && targets.north.treasure < targets.east.treasure && targets.north.treasure < targets.west.treasure) {directionClosestTreasure = "north"
+		if (targets.here.treasure !== 10 && targets.here.treasure < targets.south.treasure && targets.here.treasure < targets.east.treasure && targets.here.treasure < targets.west.treasure) {directionClosestTreasure = undefined
+		} else if (targets.north.treasure !== 10 && targets.north.treasure < targets.south.treasure && targets.north.treasure < targets.east.treasure && targets.north.treasure < targets.west.treasure) {directionClosestTreasure = "north"
 		} else if (targets.south.treasure !== 10 && targets.south.treasure < targets.north.treasure && targets.south.treasure < targets.east.treasure && targets.south.treasure < targets.west.treasure) {directionClosestTreasure = "south"
 		} else if (targets.east.treasure !== 10 && targets.east.treasure < targets.north.treasure && targets.east.treasure < targets.south.treasure && targets.east.treasure < targets.west.treasure) {directionClosestTreasure = "east"
 		} else if (targets.west.treasure !== 10 && targets.west.treasure < targets.north.treasure && targets.west.treasure < targets.east.treasure && targets.west.treasure < targets.south.treasure) {directionClosestTreasure = "west"
 		};
 		
 		var directionLowHealth = undefined;
-		if (targets.north.patient !== 100 && targets.north.patient < targets.south.patient && targets.north.patient < targets.east.patient && targets.north.patient < targets.west.patient) {directionLowHealth = "north"
+		if (targets.here.patient !== 100 && targets.here.patient < targets.south.patient && targets.here.patient < targets.east.patient && targets.here.patient < targets.west.patient) {directionLowHealth = undefined
+		} else if (targets.north.patient !== 100 && targets.north.patient < targets.south.patient && targets.north.patient < targets.east.patient && targets.north.patient < targets.west.patient) {directionLowHealth = "north"
 		} else if (targets.south.patient !== 100 && targets.south.patient < targets.north.patient && targets.south.patient < targets.east.patient && targets.south.patient < targets.west.patient) {directionLowHealth = "south"
 		} else if (targets.east.patient !== 100 && targets.east.patient < targets.north.patient && targets.east.patient < targets.south.patient && targets.east.patient < targets.west.patient) {directionLowHealth = "east"
 		} else if (targets.west.patient !== 100 && targets.west.patient < targets.north.patient && targets.west.patient < targets.east.patient && targets.west.patient < targets.south.patient) {directionLowHealth = "west"
 		};
 		
 		var directionHighHealth = undefined;
-		if (targets.north.tank !== 0 && targets.north.tank > targets.south.tank && targets.north.tank > targets.east.tank && targets.north.tank > targets.west.tank) {directionHighHealth = "north"
+		if (targets.here.tank !== 100 && targets.here.tank < targets.south.tank && targets.here.tank < targets.east.tank && targets.here.tank < targets.west.tank) {directionHighHealth = undefined
+		} else if (targets.north.tank !== 0 && targets.north.tank > targets.south.tank && targets.north.tank > targets.east.tank && targets.north.tank > targets.west.tank) {directionHighHealth = "north"
 		} else if (targets.south.tank !== 0 && targets.south.tank > targets.north.tank && targets.south.tank > targets.east.tank && targets.south.tank > targets.west.tank) {directionHighHealth = "south"
 		} else if (targets.east.tank !== 0 && targets.east.tank > targets.north.tank && targets.east.tank > targets.south.tank && targets.east.tank > targets.west.tank) {directionHighHealth = "east"
 		} else if (targets.west.tank !== 0 && targets.west.tank > targets.north.tank && targets.west.tank > targets.east.tank && targets.west.tank > targets.south.tank) {directionHighHealth = "west"
 		};
 		
 		var directionStairs = undefined;
-		if (targets.north.stairs !== 10 && targets.north.stairs < targets.south.stairs && targets.north.stairs < targets.east.stairs && targets.north.stairs < targets.west.stairs) {directionStairs = "north"
+		if (targets.here.stairs !== 10 && targets.here.stairs < targets.south.stairs && targets.here.stairs < targets.east.stairs && targets.here.stairs < targets.west.stairs) {directionStairs = undefined
+		} else if (targets.north.stairs !== 10 && targets.north.stairs < targets.south.stairs && targets.north.stairs < targets.east.stairs && targets.north.stairs < targets.west.stairs) {directionStairs = "north"
 		} else if (targets.south.stairs !== 10 && targets.south.stairs < targets.north.stairs && targets.south.stairs < targets.east.stairs && targets.south.stairs < targets.west.stairs) {directionStairs = "south"
 		} else if (targets.east.stairs !== 10 && targets.east.stairs < targets.north.stairs && targets.east.stairs < targets.south.stairs && targets.east.stairs < targets.west.stairs) {directionStairs = "east"
 		} else if (targets.west.stairs !== 10 && targets.west.stairs < targets.north.stairs && targets.west.stairs < targets.east.stairs && targets.west.stairs < targets.south.stairs) {directionStairs = "west"
