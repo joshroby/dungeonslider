@@ -8,6 +8,8 @@ var heroMoves = {};
 var exitDown = {};
 	
 function Room(level) {
+	
+	this.type = 1 + Math.random() * 12 << 0;
 
 	this.exits = {
 		north: false,
@@ -422,8 +424,14 @@ function dungeonMoves() {
 			lootTile(heroes[i].x,heroes[i].y);
 			treasureTotal--;
 			if (treasureTotal < 1) {
-				grid[exitDown.x][exitDown.y].trapdoor = false;
-				grid[exitDown.x][exitDown.y].stairs = true;
+				for (x in grid) {
+					for (y in grid[0]) {
+						if (grid[x][y].trapdoor) {
+							grid[x][y].trapdoor = false;
+							grid[x][y].stairs = true;
+						};
+					};
+				};
 			};
 			view.refreshGrid();
 		};

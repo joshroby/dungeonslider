@@ -7,7 +7,7 @@ var view = {
 				var row = ["A","B","C","D","E"][x]
 				var cellId = 'grid' + row + y;
 				var cell = document.getElementById('gameGridDiv').children[x+1].children[y+1];
-				cell.style.backgroundImage = 'url("assets/tile-room.png")';
+				cell.style.backgroundImage = 'url("assets/tile-room-'+grid[x][y].type+'.png")';
 				cell.style.backgroundSize = '100% 100%';
 				cell.innerHTML = '';
 				if (true) {
