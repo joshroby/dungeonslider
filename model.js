@@ -51,13 +51,17 @@ function Hero(type) {
 	this.loot = function(type) {
 		if (type == undefined) {type = ["weapon","armor","potion"][Math.random() * 3 << 0]};
 		
-		if (type === "weapon" && Math.random() * 10 << 0 > this.weapon) {
+		var random = ( Math.random() * 5 << 0 ) + ( Math.random() * 5 << 0 ) + ( Math.random() * 5 << 0 )
+		
+		if (type === "weapon" && random > this.weapon) {
 			this.weapon++;
+			new Audio('assets/sword.mp3').play()
 			console.log(this.type,"found a",type,"upgrade!");
 		}
 		
-		if (type === "armor" && Math.random() * 10 << 0 > this.armor) {
+		if (type === "armor" && random > this.armor) {
 			this.armor++;
+			new Audio('assets/sword.mp3').play()
 			console.log(this.type,"found a",type,"upgrade!");
 		}
 		
@@ -144,7 +148,7 @@ function Hero(type) {
 		console.log(this.type,"targets:",targets);
 		
 		var directionClosestMonster = undefined;
-		if (targets.here.monster !== 10 && targets.here.monster < targets.south.monster && targets.here.monster < targets.east.monster && targets.here.monster < targets.west.monster) {directionClosestMonster = undefined
+		if (targets.here.monster !== 10 && targets.here.monster < targets.south.monster && targets.here.monster < targets.east.monster && targets.here.monster < targets.west.monster) {directionClosestMonster = "stayput"
 		} else if (targets.north.monster !== 10 && targets.north.monster < targets.south.monster && targets.north.monster < targets.east.monster && targets.north.monster < targets.west.monster) {directionClosestMonster = "north"
 		} else if (targets.south.monster !== 10 && targets.south.monster < targets.north.monster && targets.south.monster < targets.east.monster && targets.south.monster < targets.west.monster) {directionClosestMonster = "south"
 		} else if (targets.east.monster !== 10 && targets.east.monster < targets.north.monster && targets.east.monster < targets.south.monster && targets.east.monster < targets.west.monster) {directionClosestMonster = "east"
@@ -152,7 +156,7 @@ function Hero(type) {
 		};
 		
 		var directionClosestTreasure = undefined;
-		if (targets.here.treasure !== 10 && targets.here.treasure < targets.south.treasure && targets.here.treasure < targets.east.treasure && targets.here.treasure < targets.west.treasure) {directionClosestTreasure = undefined
+		if (targets.here.treasure !== 10 && targets.here.treasure < targets.south.treasure && targets.here.treasure < targets.east.treasure && targets.here.treasure < targets.west.treasure) {directionClosestTreasure = "stayput"
 		} else if (targets.north.treasure !== 10 && targets.north.treasure < targets.south.treasure && targets.north.treasure < targets.east.treasure && targets.north.treasure < targets.west.treasure) {directionClosestTreasure = "north"
 		} else if (targets.south.treasure !== 10 && targets.south.treasure < targets.north.treasure && targets.south.treasure < targets.east.treasure && targets.south.treasure < targets.west.treasure) {directionClosestTreasure = "south"
 		} else if (targets.east.treasure !== 10 && targets.east.treasure < targets.north.treasure && targets.east.treasure < targets.south.treasure && targets.east.treasure < targets.west.treasure) {directionClosestTreasure = "east"
@@ -160,7 +164,7 @@ function Hero(type) {
 		};
 		
 		var directionLowHealth = undefined;
-		if (targets.here.patient !== 100 && targets.here.patient < targets.south.patient && targets.here.patient < targets.east.patient && targets.here.patient < targets.west.patient) {directionLowHealth = undefined
+		if (targets.here.patient !== 100 && targets.here.patient < targets.south.patient && targets.here.patient < targets.east.patient && targets.here.patient < targets.west.patient) {directionLowHealth = "stayput"
 		} else if (targets.north.patient !== 100 && targets.north.patient < targets.south.patient && targets.north.patient < targets.east.patient && targets.north.patient < targets.west.patient) {directionLowHealth = "north"
 		} else if (targets.south.patient !== 100 && targets.south.patient < targets.north.patient && targets.south.patient < targets.east.patient && targets.south.patient < targets.west.patient) {directionLowHealth = "south"
 		} else if (targets.east.patient !== 100 && targets.east.patient < targets.north.patient && targets.east.patient < targets.south.patient && targets.east.patient < targets.west.patient) {directionLowHealth = "east"
@@ -168,7 +172,7 @@ function Hero(type) {
 		};
 		
 		var directionHighHealth = undefined;
-		if (targets.here.tank !== 100 && targets.here.tank < targets.south.tank && targets.here.tank < targets.east.tank && targets.here.tank < targets.west.tank) {directionHighHealth = undefined
+		if (targets.here.tank !== 100 && targets.here.tank < targets.south.tank && targets.here.tank < targets.east.tank && targets.here.tank < targets.west.tank) {directionHighHealth = "stayput"
 		} else if (targets.north.tank !== 0 && targets.north.tank > targets.south.tank && targets.north.tank > targets.east.tank && targets.north.tank > targets.west.tank) {directionHighHealth = "north"
 		} else if (targets.south.tank !== 0 && targets.south.tank > targets.north.tank && targets.south.tank > targets.east.tank && targets.south.tank > targets.west.tank) {directionHighHealth = "south"
 		} else if (targets.east.tank !== 0 && targets.east.tank > targets.north.tank && targets.east.tank > targets.south.tank && targets.east.tank > targets.west.tank) {directionHighHealth = "east"
@@ -176,12 +180,14 @@ function Hero(type) {
 		};
 		
 		var directionStairs = undefined;
-		if (targets.here.stairs !== 10 && targets.here.stairs < targets.south.stairs && targets.here.stairs < targets.east.stairs && targets.here.stairs < targets.west.stairs) {directionStairs = undefined
+		if (targets.here.stairs !== 10 && targets.here.stairs < targets.south.stairs && targets.here.stairs < targets.east.stairs && targets.here.stairs < targets.west.stairs) {directionStairs = "stayput"
 		} else if (targets.north.stairs !== 10 && targets.north.stairs < targets.south.stairs && targets.north.stairs < targets.east.stairs && targets.north.stairs < targets.west.stairs) {directionStairs = "north"
 		} else if (targets.south.stairs !== 10 && targets.south.stairs < targets.north.stairs && targets.south.stairs < targets.east.stairs && targets.south.stairs < targets.west.stairs) {directionStairs = "south"
 		} else if (targets.east.stairs !== 10 && targets.east.stairs < targets.north.stairs && targets.east.stairs < targets.south.stairs && targets.east.stairs < targets.west.stairs) {directionStairs = "east"
 		} else if (targets.west.stairs !== 10 && targets.west.stairs < targets.north.stairs && targets.west.stairs < targets.east.stairs && targets.west.stairs < targets.south.stairs) {directionStairs = "west"
 		};
+		
+		console.log(this.type,directionClosestMonster,directionClosestTreasure,directionLowHealth,directionHighHealth,directionStairs);
 
 		var direction;
 		if (this.type === "Warrior") {
@@ -211,7 +217,6 @@ function Hero(type) {
 		this.oldX = this.x;
 		this.oldY = this.y;
 		
-		console.log(this.type,"moves",direction);
 		if (direction === "north" && this.hitPoints > 0) {
 			this.x--;
 		} else if (direction === "south" && this.hitPoints > 0) {
@@ -226,11 +231,39 @@ function Hero(type) {
 		if (this.type === "Cleric") {
 			for (i in heroes) {
 				if (heroes[i].x === this.x && heroes[i].y === this.y && heroes[i].hitPoints < 100) {
-					heroes[i].hitPoints = Math.min(100,heroes[i].hitPoints + 10);
+					heroes[i].hitPoints = Math.min(100,heroes[i].hitPoints + 2);
 				};
 			};
 		};
 		if (display) {console.log('display is true');view.refreshGrid();};
+	};
+	
+	this.goose = function() {
+		var here = grid[this.x][this.y].exits;
+		
+		console.log('goose: ',here);
+	
+		if (here.north && !here.south && !here.east && !here.west) {
+			this.x--;
+			this.hitPoints = Math.max(0,this.hitPoints - 50);
+		};
+	
+		if (!here.north && here.south && !here.east && !here.west) {
+			this.x++;
+			this.hitPoints = Math.max(0,this.hitPoints - 50);
+		};
+	
+		if (!here.north && !here.south && !here.east && here.west) {
+			this.y--;
+			this.hitPoints = Math.max(0,this.hitPoints - 50);
+		};
+	
+		if (!here.north && !here.south && here.east && !here.west) {
+			this.y++;
+			this.hitPoints = Math.max(0,this.hitPoints - 50);
+		};
+		
+		view.refreshGrid();
 	};
 	
 };
@@ -286,7 +319,7 @@ function newGame(level,x,y) {
 	
 	if (Object.keys(heroes).length === 0) {
 	
-		var heroTypes = {warrior:1,thief:1,wizard:1,cleric:1};
+		var heroTypes = {warrior:1,thief:1,cleric:1,wizard:1};
 	
 		for (i in heroTypes) {
 			var newHero = new Hero(i);
@@ -325,6 +358,7 @@ function slide(direction,index) {
 	} else if (direction === "left") {
 		grid[index].push(grid[index][0]);
 		grid[index].shift()
+	} else if (direction === "skip") {
 	} else {
 		console.log("Error: invalid direction to slide in.");
 	};
@@ -407,4 +441,10 @@ function lootTile(x,y) {
 	for (i in heroes) {
 		if (heroes[i].x === x && heroes[i].y === y) {heroes[i].loot()};
 	}
+};
+
+function gooseAll() {
+	for (i in heroes) {
+		heroes[i].goose();
+	};
 };
