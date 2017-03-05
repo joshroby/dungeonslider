@@ -5,6 +5,7 @@ var heroes = {};
 var dungeonLevel = 1;
 var treasureTotal = 0;
 var heroMoves = {};
+var exitDown = {};
 	
 function Room(level) {
 
@@ -299,6 +300,10 @@ function newGame(level,x,y) {
 		grid[Math.random() * grid.length << 0][Math.random() * grid[0].length << 0].monster = true;
 	};
 	
+	exitDown.x = Math.random() *  grid.length << 0;
+	exitDown.y = Math.random() *  grid[0].length << 0;
+	grid[exitDown.x][exitDown.y].trapdoor = true;
+	
 	if (level = 1 && grid[2][2].monster) {
 		grid[2][2].monster = false;
 		grid[1][1].monster = true;
@@ -417,7 +422,8 @@ function dungeonMoves() {
 			lootTile(heroes[i].x,heroes[i].y);
 			treasureTotal--;
 			if (treasureTotal < 1) {
-				grid[Math.random() * grid.length << 0][Math.random() * grid[0].length << 0].stairs = true;
+				grid[exitDown.x][exitDown.y].trapdoor = false;
+				grid[exitDown.x][exitDown.y].stairs = true;
 			};
 			view.refreshGrid();
 		};

@@ -84,8 +84,12 @@ body {
 	z-index: 5;
 	}
 
-.treasure {
+.trapdoor {
 	z-index: 6;
+	}
+
+.treasure {
+	z-index: 7;
 	}
 
 .monster {

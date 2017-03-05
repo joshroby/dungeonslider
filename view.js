@@ -44,6 +44,13 @@ var view = {
 					exitWest.src = 'assets/exit-w.png';
 					cell.appendChild(exitWest);
 				};
+				if (grid[x][y].trapdoor) {
+					var trapdoor = document.createElement('img');
+					trapdoor.id = cellId + 'trapdoor';
+					trapdoor.className = 'trapdoor, tileImg';
+					trapdoor.src = 'assets/trapdoor.png';
+					cell.appendChild(trapdoor);
+				};
 				if (grid[x][y].stairs) {
 					var stairs = document.createElement('img');
 					stairs.id = cellId + 'stairs';
